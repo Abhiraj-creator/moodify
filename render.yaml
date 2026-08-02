@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: moodify
+    runtime: node
+    # Root of the repo to deploy from
+    rootDir: backend
+    # Install backend deps, then build the React frontend into backend/public
+    buildCommand: npm install && npm run build
+    # Start the Express server
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false        # Set this in Render dashboard
+      - key: JWT_SECRET
+        sync: false        # Set this in Render dashboard
+      - key: REDIS_HOST
+        sync: false        # Set this in Render dashboard
+      - key: REDIS_PORT
+        sync: false        # Set this in Render dashboard
+      - key: REDIS_PASSWORD
+        sync: false        # Set this in Render dashboard
+      - key: IMAGEKIT_PRIVATE_KEY
+        sync: false        # Set this in Render dashboard

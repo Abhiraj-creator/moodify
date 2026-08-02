@@ -29,23 +29,23 @@ app.use(cors({
 }))
 app.use(express.json());
 app.use(cookieParser())
+
+// API routes (must be before static files)
 app.use('/api/auth',AuthRouter);
 app.use('/api/song',SongRouter);
 
+// Serve frontend static build (backend/public)
 const frontendBuildPath = path.join(__dirname, '..', 'public');
 
 if (fs.existsSync(frontendBuildPath)) {
     app.use(express.static(frontendBuildPath));
 
-    app.get(/(.*)/, (req, res) => {
-        if (req.path.startsWith('/api')) {
-            return res.status(404).json({ message: 'API route not found' });
-        }
-
-        return res.sendFile(path.join(frontendBuildPath, 'index.html'));
+    // SPA fallback — serve index.html for any non-API route
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(frontendBuildPath, 'index.html'));
     });
 }
 
 
 
-module.exports=app;
+module.exports=app;

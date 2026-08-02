@@ -37,16 +37,38 @@ app.use('/api/song',SongRouter);
 // Serve frontend static build (backend/public)
 const frontendBuildPath = path.join(__dirname, '..', 'public');
 
+// --- Diagnostics (visible in Render logs) ---
+console.log('[static] frontendBuildPath:', frontendBuildPath);
+console.log('[static] directory exists:', fs.existsSync(frontendBuildPath));
 if (fs.existsSync(frontendBuildPath)) {
-    app.use(express.static(frontendBuildPath));
-
-    // SPA fallback — serve index.html for any non-API route
-    // Note: Express 5 requires named wildcard params — bare '*' is not allowed
-    app.get('/{*splat}', (req, res) => {
-        res.sendFile(path.join(frontendBuildPath, 'index.html'));
-    });
+    console.log('[static] contents:', fs.readdirSync(frontendBuildPath));
+    const assetsPath = path.join(frontendBuildPath, 'assets');
+    if (fs.existsSync(assetsPath)) {
+        console.log('[static] assets/:', fs.readdirSync(assetsPath));
+    } else {
+        console.log('[static] assets/ folder is MISSING');
+    }
 }
+// -------------------------------------------
+
+// Always register static middleware (even if directory is empty)
+app.use(express.static(frontendBuildPath));
+
+// SPA fallback — only serve index.html for non-asset, non-API GET requests
+// Asset extensions must 404 (not return HTML) to avoid MIME type errors
+app.get('/{*splat}', (req, res, next) => {
+    // Skip files with extensions (assets, fonts, images, etc.)
+    if (/\.\w+$/.test(req.path)) {
+        return next();
+    }
+    const indexPath = path.join(frontendBuildPath, 'index.html');
+    if (!fs.existsSync(indexPath)) {
+        return res.status(404).send('Frontend not built. Run: npm run build in frontend/');
+    }
+    res.sendFile(indexPath);
+});
 
 
 
-module.exports=app;
+module.exports=app;
+

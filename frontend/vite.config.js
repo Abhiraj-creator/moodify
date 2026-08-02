@@ -8,6 +8,6 @@ export default defineConfig({
   build: {
     // Output directly into backend/public so Express can serve it
     outDir: path.resolve(__dirname, '../backend/public'),
-    emptyOutDir: true,
   },
 })
+

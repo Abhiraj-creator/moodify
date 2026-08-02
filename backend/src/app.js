@@ -56,7 +56,7 @@ app.use(express.static(frontendBuildPath));
 
 // SPA fallback — only serve index.html for non-asset, non-API GET requests
 // Asset extensions must 404 (not return HTML) to avoid MIME type errors
-app.get('/{*splat}', (req, res, next) => {
+app.get('/*splat', (req, res, next) => {
     // Skip files with extensions (assets, fonts, images, etc.)
     if (/\.\w+$/.test(req.path)) {
         return next();
@@ -71,4 +71,4 @@ app.get('/{*splat}', (req, res, next) => {
 
 
 module.exports=app;
-
+

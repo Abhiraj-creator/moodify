@@ -5,6 +5,13 @@ const path = require('path');
 const frontendDir = path.join(__dirname, '..', '..', 'frontend');
 const backendPublicDir = path.join(__dirname, '..', 'public');
 
+console.log('=== RENDER BUILD PATH DIAGNOSTICS ===');
+console.log('Current working directory (cwd):', process.cwd());
+console.log('__dirname path:', __dirname);
+console.log('Target Frontend Directory:', frontendDir);
+console.log('Target Backend Public Directory:', backendPublicDir);
+console.log('======================================');
+
 if (!fs.existsSync(frontendDir)) {
     throw new Error('Frontend directory not found');
 }

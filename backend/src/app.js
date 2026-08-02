@@ -41,7 +41,8 @@ if (fs.existsSync(frontendBuildPath)) {
     app.use(express.static(frontendBuildPath));
 
     // SPA fallback — serve index.html for any non-API route
-    app.get('*', (req, res) => {
+    // Note: Express 5 requires named wildcard params — bare '*' is not allowed
+    app.get('/{*splat}', (req, res) => {
         res.sendFile(path.join(frontendBuildPath, 'index.html'));
     });
 }

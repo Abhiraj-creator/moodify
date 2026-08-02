@@ -4,8 +4,8 @@ services:
     runtime: node
     # Root of the repo to deploy from
     rootDir: backend
-    # Only install backend deps — frontend is pre-built and committed to backend/public
-    buildCommand: npm install
+    # Install deps and build the frontend into backend/public on each deploy
+    buildCommand: npm install && npm run build
     # Start the Express server
     startCommand: npm start
     envVars:

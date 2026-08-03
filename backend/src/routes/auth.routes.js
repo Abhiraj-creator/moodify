@@ -32,4 +32,5 @@ api:-logout
 get
 */
 AuthRouter.get('/logout',Usercontroller.UserLogoutController)
+
 module.exports=AuthRouter;

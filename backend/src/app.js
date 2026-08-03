@@ -14,19 +14,23 @@ const app=express()
 const cors=require('cors');
 
 //middlewares
-const allowedOrigins = [process.env.CLIENT_URL, 'http://localhost:5173'];
+const allowedOrigins = [process.env.CLIENT_URL?.trim(), 'http://localhost:5173'];
 
-app.use(cors({
+const corsOptions = {
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
+        const isAllowed = !origin || allowedOrigins.includes(origin);
+        console.log('[cors] origin:', origin, 'allowedOrigins:', allowedOrigins, 'allowed:', isAllowed);
+        if (isAllowed) {
             callback(null, true);
             return;
         }
-
         callback(new Error('Not allowed by CORS'));
     },
-    credentials:true
-}))
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser())
 

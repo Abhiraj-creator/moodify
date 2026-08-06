@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: moodify
-    runtime: node
-    rootDir: backend
-    buildCommand: npm ci && npm run build
-    startCommand: npm start
